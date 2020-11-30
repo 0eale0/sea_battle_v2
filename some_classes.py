@@ -56,3 +56,4 @@ class Ship:
         self.hp = size
         self.x = None
         self.y = None
+        self.booked_places = []  # all book coords

@@ -1,7 +1,8 @@
 import constants_for_classes
 
-
 #  Static functions for the classes
+
+
 def create_ships():
     ships = []
     for size in constants_for_classes.size_of_ships:
@@ -14,9 +15,6 @@ class SeaBattleGame:
     def __init__(self, player_1, player_2):
         self.players_1 = player_1
         self.players_2 = player_2
-
-    def place_ship(self):
-        pass
 
     def hit(self):
         pass
@@ -33,7 +31,7 @@ class Field:
         self.field = [[0] * length for i in range(height)]
 
     def __str__(self):
-        pass  # there's should be visual for user
+        pass  # NEED FIX
 
 
 class Player:

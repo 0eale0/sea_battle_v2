@@ -9,12 +9,10 @@ def main():
 
     for ship in player_1.ships:
         print(ship.size)
-        print(player_1.field)
         ship.x = int(input('x: '))
         ship.y = int(input('y: '))
         logic.place_ship(player_1, ship)
-        for line in player_1.field:
-            print(*line)
+        print(player_1.field)
 
 
 if __name__ == '__main__':

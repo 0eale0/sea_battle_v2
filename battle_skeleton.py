@@ -34,3 +34,46 @@ for index in range(size):
 
 for line in field:
     print(*line)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class Field:
+    """
+    Create a field for the player with height and length. Next time planning to add some methods
+    WATCH OUT THERE'S A NOT int(0), BUT str(0)
+    """
+    def __init__(self,
+                 height: int = 10,
+                 length: int = 10):
+
+        self.__field = [['0'] * length for i in range(height)]
+
+    def __str__(self):
+        result = [' '.join(x) for x in self.__field]
+        result = '\n'.join(result)
+        return result
+
+    def __setitem__(self, key, data):  # по сути бесполезна, не оспользуется
+        self.__field[key] = data
+
+
+field = Field()
+field[1][1] = '2'  # Замена происходит только из-за того, что __getitem__ возвращает внутренний список
+print(field)

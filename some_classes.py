@@ -23,15 +23,26 @@ class SeaBattleGame:
 class Field:
     """
     Create a field for the player with height and length. Next time planning to add some methods
+    WATCH OUT THERE'S A NOT int(0), BUT str(0)
     """
     def __init__(self,
                  height: int = constants_for_classes.height,
                  length: int = constants_for_classes.length):
 
-        self.field = [[0] * length for i in range(height)]
+        self.__field = [['0'] * length for i in range(height)]
 
     def __str__(self):
-        pass  # NEED FIX
+        result = [' '.join(x) for x in self.__field]
+        result = '\n'.join(result)
+        return result
+
+    def __setitem__(self, key):
+        #print(key)
+        return self.__field[key]
+
+    def __getitem__(self, key):
+        print(key)
+        return self.__field[key]
 
 
 class Player:
@@ -52,6 +63,23 @@ class Ship:
         self.orientation = orientation
         self.already_place = False
         self.hp = size
-        self.x = None
-        self.y = None
+        self.__x = None
+        self.__y = None
         self.booked_places = []  # all book coords
+
+    @property
+    def x(self) -> int:
+        return self.__x
+
+    @x.setter
+    def x(self, x_from_user) -> None:
+        self.__x = x_from_user - 1  # -1 for list (0-9)
+
+    @property
+    def y(self) -> int:
+        return self.__x
+
+    @y.setter
+    def y(self, y_from_user) -> None:
+        self.__y = y_from_user - 1  # -1 for list (0-9)
+

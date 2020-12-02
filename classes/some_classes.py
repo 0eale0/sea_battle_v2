@@ -1,4 +1,4 @@
-import constants_for_classes
+from classes import constants_for_classes
 
 #  Static functions for the classes
 

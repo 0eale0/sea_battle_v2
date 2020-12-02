@@ -49,8 +49,6 @@ def place_ship(player, ship):
                     player.field[y + i, x + j] = 'z'
 
         x, y = change_place(x, y, orientation)
-        print(x, y)
-        print(ship.x, ship.y)
 
     # place ship base
     x = ship.x  # reset x

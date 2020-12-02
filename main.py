@@ -1,4 +1,4 @@
-import some_classes
+from classes import some_classes
 import logic
 
 

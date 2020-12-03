@@ -13,7 +13,10 @@ def main():
         ship.y = int(input('y: '))
         logic.place_ship(player_1, ship)
         print(player_1.field)
+        print(type(player_1.ships[0]))
+    logic.hit(player_1)
 
 
 if __name__ == '__main__':
     main()
+

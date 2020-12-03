@@ -1,3 +1,6 @@
+from classes import constants_for_classes
+
+
 def check_place(player, ship) -> bool:
     """
     This function check place for the ship. If it's ok return True, else False
@@ -57,3 +60,19 @@ def place_ship(player, ship):
         player.field[y, x] = ship  # should be not size, but ship
 
         x, y = change_place(x, y, orientation)
+
+
+def hit(player):
+    coordinats = [int(i) for i in input('y/x: ').split()]
+    x = coordinats[0]
+    y = coordinats[1]
+    if str(type(player.field[y, x])) == "<class 'classes.some_classes.Ship'>":
+        player.field[y, x].hp -= 1
+        if player.field[y, x].hp == 0:
+            pass
+        player.field[y, x] = '+'
+    else:
+        player.field[y, x] = '*'
+    # TODO атака корабля/клетки
+    # TODO продолжение хода при попадане
+    # Todo создание битого поля при уничтожение корабля

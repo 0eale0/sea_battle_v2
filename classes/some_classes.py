@@ -1,4 +1,5 @@
 from classes import constants_for_classes
+from visual import emojies
 
 #  Static functions for the classes
 
@@ -15,6 +16,7 @@ class SeaBattleGame:
     def __init__(self, player_1, player_2):
         self.players_1 = player_1
         self.players_2 = player_2
+        self.turn = 0  # can be 1 or 2
 
     def hit(self):
         pass
@@ -30,7 +32,7 @@ class Field:
                  length: int = constants_for_classes.length):
 
         self.__field = [['0'] * length for i in range(height)]
-        self.__visual_field = [['0'] * length for i in range(height)]
+        self.__visual_field = [[emojies.zero] * length for i in range(height)]
 
     def __str__(self):
         result = [' '.join(x) for x in self.__visual_field]
@@ -39,7 +41,13 @@ class Field:
 
     def __setitem__(self, key, data):
         self.__field[key[0]][key[1]] = data
-        self.__visual_field[key[0]][key[1]] = str(data)
+
+        if isinstance(data, Ship):  # only for objects emoji can't str(str)
+            self.__visual_field[key[0]][key[1]] = str(data)
+            return
+
+        else:
+            self.__visual_field[key[0]][key[1]] = emojies.dict_for_data[data]
 
     def __getitem__(self, key):
         return self.__field[key[0]][key[1]]
@@ -68,7 +76,8 @@ class Ship:
         self.hp = size
         self.__x = None
         self.__y = None
-        self.booked_places = []  # all book coords
+        self.booked_places = [[], []]  # all book coords. First list for the 'z', next for the objects like this:
+        #  [[(1, 2), (3, 4)], [(0, 0)]] cords in example is random, bus is show structure
 
     def __str__(self):
         return str(self.size)

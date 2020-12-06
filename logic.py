@@ -1,4 +1,12 @@
-from classes import constants_for_classes
+from classes.some_classes import Ship
+
+
+def boom(player, ship):
+    for tuple_cell in ship.booked_places[0]:  # work with 'z'
+        player.field[tuple_cell] = 'fall'
+
+    for tuple_cell in ship.booked_places[1]:  # work with objects
+        player.field[tuple_cell] = 'boom_ship'
 
 
 def check_place(player, ship) -> bool:
@@ -50,6 +58,7 @@ def place_ship(player, ship):
             for j in range(-1, 2):
                 if 0 <= y + i <= 9 and 0 <= x + j <= 9:
                     player.field[y + i, x + j] = 'z'
+                    ship.booked_places[0].append((y + i, x + j))  # save 'z' coords in the class
 
         x, y = change_place(x, y, orientation)
 
@@ -58,21 +67,31 @@ def place_ship(player, ship):
     y = ship.y  # reset y
     for i in range(size):
         player.field[y, x] = ship  # should be not size, but ship
+        ship.booked_places[1].append((y, x))  # save object coords in the class
 
         x, y = change_place(x, y, orientation)
 
+    ship.already_place = True  # Save ship status
 
-def hit(player):
-    coordinats = [int(i) for i in input('y/x: ').split()]
-    x = coordinats[0]
-    y = coordinats[1]
-    if str(type(player.field[y, x])) == "<class 'classes.some_classes.Ship'>":
+
+def hit(player):  # should take enemy player and coords
+    coords = [int(i) for i in input('x/y: ').split()]
+    x = coords[0]
+    y = coords[1]
+
+    if isinstance(player.field[y, x], Ship):
         player.field[y, x].hp -= 1
+
         if player.field[y, x].hp == 0:
-            pass
-        player.field[y, x] = '+'
+            boom(player, player.field[y, x])
+            return
+
+        player.field[y, x] = 'fire'
+
+    elif player.field[y, x] == '0':
+        player.field[y, x] = 'fall'
     else:
-        player.field[y, x] = '*'
+        print('Поле уже простреленно')  # ERROR, DON'T CHANGE THE TURN!!!
     # TODO атака корабля/клетки
     # TODO продолжение хода при попадане
     # Todo создание битого поля при уничтожение корабля

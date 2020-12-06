@@ -13,8 +13,10 @@ def main():
         ship.y = int(input('y: '))
         logic.place_ship(player_1, ship)
         print(player_1.field)
-        print(type(player_1.ships[0]))
-    logic.hit(player_1)
+
+    while True:
+        logic.hit(player_1)
+        print(player_1.field)
 
 
 if __name__ == '__main__':

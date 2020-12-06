@@ -14,6 +14,11 @@ def main():
         logic.place_ship(player_1, ship)
         print(player_1.field)
 
+    while True:
+        logic.hit(player_1)
+        print(player_1.field)
+
 
 if __name__ == '__main__':
     main()
+

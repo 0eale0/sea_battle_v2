@@ -24,7 +24,7 @@ class SaveGame:
         self.cursor.execute("DROP TABLE save_field_" + number_game)  # удаляет таблицу
         self.con.commit()
 
-    def unpacking(self, number_game):
+    def unpacking(self, number_game: str):
         # извлекает последние внесенные изменения
         for row in self.cursor.execute(
                 "SELECT rowid, * FROM save_field_" + number_game + " ORDER BY player1"):

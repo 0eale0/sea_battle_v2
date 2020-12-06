@@ -1,4 +1,5 @@
 from classes.some_classes import Ship
+from errors import errors
 
 
 def boom(player, ship):
@@ -46,7 +47,7 @@ def place_ship(player, ship):
     Function place the ship in to coords, when it possible
     """
     if not check_place(player, ship):
-        return False
+        raise errors.cant_place
     x = ship.x
     y = ship.y
     size = ship.size
@@ -91,7 +92,7 @@ def hit(player):  # should take enemy player and coords
     elif player.field[y, x] == '0':
         player.field[y, x] = 'fall'
     else:
-        print('Поле уже простреленно')  # ERROR, DON'T CHANGE THE TURN!!!
+        raise errors.already_hit  # ERROR, DON'T CHANGE THE TURN!!!
     # TODO атака корабля/клетки
     # TODO продолжение хода при попадане
     # Todo создание битого поля при уничтожение корабля

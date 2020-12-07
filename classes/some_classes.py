@@ -24,6 +24,7 @@ class SeaBattleGame:
         self.players_1 = player_1
         self.players_2 = player_2
         self.turn = 0  # can be 1 or 2
+        self.game_id = player_1.t_id + player_2.t_id
 
     def hit(self):
         pass

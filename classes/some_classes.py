@@ -42,10 +42,13 @@ class Field(Base):
     def __init__(self,
                  height: int = constants_for_classes.height,
                  length: int = constants_for_classes.length):
+
         self.__field = [['0'] * length for i in range(height)]
         self.field_for_save = str(self.__field)
+
         self.__visual_field = [[emojies.zero] * length for i in range(height)]
         self.visual_field_for_save = str(self.__visual_field)
+
         s.add(self)
         s.commit()
 

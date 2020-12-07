@@ -14,6 +14,7 @@ def main():
         ship.y = int(input('y: '))
         try:
             logic.place_ship(player_1, ship)
+            print(player_1.field)
 
         except errors.MyError as err:
             print(*err.args)  # print text of error, from errors.py

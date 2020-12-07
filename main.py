@@ -1,6 +1,15 @@
 from classes import some_classes
 import logic
 from errors import errors
+from aiogram import executor
+from aiogram import Bot, Dispatcher, executor, types
+import asyncio
+from telegram import config
+
+
+loop = asyncio.get_event_loop()
+bot = Bot(config.token)
+dp = Dispatcher(bot, loop=loop)
 
 
 def main():
@@ -24,4 +33,6 @@ def main():
 
 
 if __name__ == '__main__':
+    from telegram.handlers import dp, send_to_admin
+    executor.start_polling(dp, on_startup=send_to_admin)
     main()

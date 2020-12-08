@@ -4,7 +4,8 @@ from sqlalchemy import *
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-engine = create_engine('sqlite:///database.db', echo=True)
+
+engine = create_engine('sqlite:///database.db', echo=False)
 Base = declarative_base(bind=engine)
 
 
@@ -19,14 +20,24 @@ def create_ships():
 
 
 #  Classes
-class SeaBattleGame:
+class SeaBattleGame(Base):
+    __tablename__ = 'SeaBattleGame'
+    id = Column(Integer, primary_key=True)
+    turn = Column(Integer)
+    game_id = Column(Integer)
+
     def __init__(self, player_1, player_2):
         self.players_1 = player_1
         self.players_2 = player_2
         self.turn = 0  # can be 1 or 2
         self.game_id = player_1.t_id + player_2.t_id
+        s.add(self)
+        s.commit()
 
     def hit(self):
+        pass
+
+    def renovation(self):
         pass
 
 
@@ -49,7 +60,6 @@ class Field(Base):
 
         self.__visual_field = [[emojies.zero] * length for i in range(height)]
         self.visual_field_for_save = str(self.__visual_field)
-
         s.add(self)
         s.commit()
 
@@ -87,8 +97,8 @@ class Player(Base):
         self.t_id = t_id
         self.nickname = nickname
         self.ships = create_ships()
-        s.add(self)
         s.commit()
+        # add id game
 
 
 class Ship(Base):
@@ -141,7 +151,6 @@ class Ship(Base):
         s.commit()
 
 
-sum_id = 'test'
 Base.metadata.create_all()
 Session = sessionmaker(bind=engine)
 s = Session()

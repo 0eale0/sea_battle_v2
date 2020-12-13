@@ -1,9 +1,6 @@
 import sqlite3
-import pickle
-import base64
 
-
-conn = sqlite3.connect("my_db.db")
+conn = sqlite3.connect("data_base/my_db.db")
 cursor = conn.cursor()
 
 all_t_id = "SELECT * from sea_battle"
@@ -19,6 +16,6 @@ def insert_player_to_game(t_id: int, current_game: str):
 # cursor.execute("INSERT INTO ships VALUES(4, 4, 0, 0, 666, 1, 'vertical')")
 # cursor.execute("SELECT * FROM ships t_id")
 # result = cursor.fetchall()
-#tables.create_in_queue()
-#cursor.execute("INSERT INTO in_queue VALUES(666, 666)")
-#conn.commit()
+# tables.create_in_queue()
+# cursor.execute("INSERT INTO in_queue VALUES(666, 666)")
+# conn.commit()

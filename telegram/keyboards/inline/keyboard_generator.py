@@ -2,7 +2,8 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from classes import some_classes
 from visual import emojies
 
-player_for_test = some_classes.Player()
+
+# player_for_test = some_classes.Player()
 keyboard = InlineKeyboardMarkup(row_width=8)
 
 field = [['  ' + emojies.fire + '  '] * 8 for i in range(12)]

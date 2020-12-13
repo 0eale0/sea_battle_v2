@@ -1,4 +1,4 @@
-from db import cursor, conn
+from data_base.db import cursor, conn
 
 
 def create_field():
@@ -14,18 +14,18 @@ def create_field():
 
 def create_ships():
     size: int
+    t_id: int
+    ship_id: str
+    booked_places: str # all book coords. First list for the 'z', next for the objects like this:
     hp: int
     x: int
     y: int
-    booked_places: str  # all book coords. First list for the 'z', next for the objects like this:
-    #  [[(1, 2), (3, 4)], [(0, 0)]] cords in example is random, bus is show structure
-    t_id: int
-    ship_id: int
+    #  [[(1, 2), (3, 4)], [(0, 0)]] cords in example is random, bus is show str
     already_place: int
     orientation: str
     cursor.execute("""CREATE TABLE ships
-                      (size, hp, x, y, booked_places, t_id, ship_id, 
-                      already_place, orientation)""")
+                      (size, t_id, ship_id, booked_places, hp, x, 
+                       y, already_place, orientation)""")
     conn.commit()
 
 
@@ -33,6 +33,13 @@ def create_player():
     t_id: int
     nickname: str
     cursor.execute("""CREATE TABLE player (t_id, nickname)""")
+    conn.commit()
+
+
+def create_phase():
+    t_id: int
+    player_phase: str
+    cursor.execute("""CREATE TABLE phase (t_id, player_phase)""")
     conn.commit()
 
 
@@ -45,4 +52,5 @@ def create_sea_battle_game():
 
 def create_in_queue():
     t_id: int
-    cursor.execute("""CREATE TABLE in_queue (t_id)""")
+    nickname: str
+    cursor.execute("""CREATE TABLE in_queue (t_id, nickname)""")

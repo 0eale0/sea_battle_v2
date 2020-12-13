@@ -4,7 +4,7 @@ from errors import errors
 from aiogram import executor
 from aiogram import Bot, Dispatcher, executor, types
 import asyncio
-from telegram import config
+from telegram.data import config
 
 
 loop = asyncio.get_event_loop()
@@ -35,4 +35,4 @@ def main():
 if __name__ == '__main__':
     from telegram.handlers import dp, send_to_admin
     executor.start_polling(dp, on_startup=send_to_admin)
-    main()
+    # main()

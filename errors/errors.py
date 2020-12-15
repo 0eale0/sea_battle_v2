@@ -5,3 +5,4 @@ class MyError(Exception):
 
 cant_place = MyError('Невозможно установить здесь корабль')
 already_hit = MyError('Вы туда уже стреляли')
+already_in_queue = MyError('Нет необходимости спамить')

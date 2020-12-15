@@ -103,7 +103,7 @@ def create_field(t_id, tuples_with_basic_info: list = False, ships: list = False
 
         cursor.execute(f"SELECT * FROM ships WHERE t_id = {t_id}")
         tuples_with_basic_info_for_ships = cursor.fetchall()
-        ships = create_ships(t_id, tuples_with_basic_info=tuples_with_basic_info_for_ships)
+        #ships = create_ships(t_id, tuples_with_basic_info=tuples_with_basic_info_for_ships)
 
         for list_with_cells in dict_with_args['field']:  # visual_field = [[1, 2, 3], [3, 2, 1]] 12 X 8
             for i in range(length):
@@ -151,7 +151,7 @@ def collect_full_player(t_id, enemy_id):
     tuple_with_basic_info_for_field = cursor.fetchall()
 
     ships = create_ships(t_id, tuple_with_basic_info_for_ships)
-    field = create_field(t_id, tuple_with_basic_info_for_field)
+    field = create_field(t_id, tuple_with_basic_info_for_field, ships=ships)
 
     player = create_player(t_id, enemy_id, field, ships)
 

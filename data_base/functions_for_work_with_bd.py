@@ -3,8 +3,13 @@ from data_base import tables
 from errors import errors
 from visual import emojies
 from aiogram.types import Message
-from data_base import functions_for_create_objects
+from logic import phases
 import json
+
+
+def get_phase(t_id):
+    cursor.execute(f"SELECT player_phase from phase WHERE t_id = {t_id}")
+    phase = cursor.fetchone()
 
 
 def get_players(table):
@@ -19,8 +24,20 @@ def create_phase(t_id):
     if t_id in players:
         return
     else:
-        cursor.execute("INSERT INTO phase VALUES(?, ?)", (t_id, 'in_queue'))
+        cursor.execute("INSERT INTO phase VALUES(?, ?)", (t_id, phases.phase_1))
         conn.commit()
+
+
+def get_turn_info(game):
+    # get turn from bd and check for player
+    cursor.execute("SELECT turn FROM sea_battle_game WHERE t_id_1 = ? OR t_id_2 = ?", (game.player_1.t_id,
+                                                                                       game.player_2.t_id))
+    turn = cursor.fetchone()[0]
+    reverse_turn = 2 if turn == 1 else 1
+    cost_dict_for_turn = {1: game.player_1,
+                          2: game.player_2}
+
+    return turn, reverse_turn, cost_dict_for_turn
 
 
 def change_phase(t_id, phase):
@@ -40,7 +57,6 @@ def insert_player_to_queue(message: Message):
     command = "SELECT * from in_queue"
     cursor.execute(command)
     queue = cursor.fetchall()  # queue right now
-    print(queue)
 
     if len(queue) == 1 and t_id in queue[0]:  # if already one in queue
         raise errors.already_in_queue
@@ -51,17 +67,13 @@ def insert_player_to_queue(message: Message):
 
         create_phase(t_id)  # create value in table phase
         conn.commit()
-        print('start_game')
 
         players = get_players(table='in_queue')
         for player in players:
-            change_phase(player, 'place_ships')
+            change_phase(player, phases.phase_2)
 
         cursor.execute("SELECT * FROM in_queue")  # get players in the queue
         result = cursor.fetchall()  # [(666, 555)]
-        print(result)
-        cursor.execute("DELETE FROM in_queue")  # clear table
-        conn.commit()
 
         return result
 
@@ -71,6 +83,7 @@ def insert_player_to_queue(message: Message):
         cursor.execute("INSERT INTO in_queue VALUES(?, ?)", (t_id, nickname))
         conn.commit()
         return False
+
 
 
 if __name__ == "__main__":

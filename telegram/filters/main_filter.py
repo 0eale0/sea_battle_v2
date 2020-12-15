@@ -35,7 +35,7 @@ async def start_filter(message: Message):
 
 
 async def filter_callback(callback: CallbackQuery):
-    await callback.answer(cache_time=0.5)
+    await callback.answer(cache_time=1)
     cursor.execute(f"SELECT player_phase FROM phase WHERE t_id = {callback.from_user.id}")
     phase = cursor.fetchone()[0]
 

@@ -36,11 +36,13 @@ async def call_back_for_phase_4(callback, game=False):
     reverse_turn = turn_info[1]
     cost_dict_for_turn = turn_info[2]
 
-    if t_id != cost_dict_for_turn[turn].t_id:  # I don't know, how that work, sry :(
-        print('what')
+    if t_id != cost_dict_for_turn[turn].t_id:
+        print("noy you're turn")
         return
 
-    await call_back_for_hit(callback, cost_dict_for_turn, reverse_turn, game)  # can change the turn in db if miss hit
+    player_for_hit = cost_dict_for_turn[reverse_turn]
+
+    await call_back_for_hit(callback, player_for_hit, game)  # can change the turn in db if miss hit
 
     new_turn_info = functions_for_work_with_bd.get_turn_info(game)  # [(turn, reverse_turn, cost_dict)]
 
@@ -50,17 +52,19 @@ async def call_back_for_phase_4(callback, game=False):
 
     print(turn, new_turn)
 
-    if turn != new_turn:  # sry :(
+    if turn != new_turn:
         print('sleep')
         await call_back_for_show_phase_4(callback, game, turn)
         await asyncio.sleep(1.5)
 
     await call_back_for_show_phase_4(callback, game)
 
+    if logic.check_if_win(player_for_hit):
+        print('Победа')
+
 
 async def call_back_for_hit(callback: CallbackQuery,
-                            cost_dict_for_turn: dict,
-                            reverse_turn: int,
+                            player_for_hit,
                             game: some_classes.SeaBattleGame = False,):
     t_id = callback.from_user.id
 
@@ -70,8 +74,6 @@ async def call_back_for_hit(callback: CallbackQuery,
     data = [int(cord) for cord in callback.data.split()]  # [y, x]
     y = data[0]
     x = data[1]
-
-    player_for_hit = cost_dict_for_turn[reverse_turn]
 
     if logic.hit(player=player_for_hit, y=y, x=x):  # if miss
         game.change_turn()
@@ -84,8 +86,6 @@ async def call_back_for_show_phase_4(callback: CallbackQuery,
     turn_info = functions_for_work_with_bd.get_turn_info(game)  # [(turn, reverse_turn, cost_dict)]
     reverse_turn = turn_info[1]
     cost_dict_for_turn = turn_info[2]
-
-    print(f'reverse_turn: {reverse_turn} old_turn: {old_turn}')
 
     if old_turn and old_turn == reverse_turn:
         reverse_turn = turn_info[0]
@@ -143,10 +143,10 @@ async def call_back_for_random(callback: CallbackQuery):
 
     # create ships if all already placed
     for ship in ships:
-        if ship.already_place:
-            continue
-        functions_for_create_objects.create_ships_for_random(t_id)
-        break
+        if not ship.already_place:
+            break
+        if ship.ship_id == '1.3':
+            functions_for_create_objects.create_ships_for_random(t_id)
 
     game = functions_for_create_objects.collect_current_game_from_in_queue(t_id)
 

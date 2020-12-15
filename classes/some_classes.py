@@ -72,7 +72,6 @@ class Field:
 
         if isinstance(data, Ship):  # only for objects emoji can't str(str)
             self.__visual_field[key[0]][key[1]] = data.ship_id
-            return
 
         else:
             self.__visual_field[key[0]][key[1]] = data

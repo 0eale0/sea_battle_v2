@@ -43,7 +43,7 @@ def change_place(x, y, orientation) -> tuple:
     return x, y
 
 
-def place_ship(player, ship):
+def place_ship(player, ship, booked_places_in_random: list = False):
     """
     WATCH OUT! this function can change the player.field
     Function place the ship in to coords, when it possible
@@ -61,6 +61,9 @@ def place_ship(player, ship):
             for j in range(-1, 2):
                 if 0 <= y + i <= height - 1 and 0 <= x + j <= length - 1:
                     player.field[y + i, x + j] = 'z'
+                    if isinstance(booked_places_in_random, list):
+                        booked_places_in_random.append((y + i, x + j))
+
                     ship.booked_places_append(0, (y + i, x + j))  # save 'z' coords in the class
         x, y = change_place(x, y, orientation)
 
@@ -69,6 +72,8 @@ def place_ship(player, ship):
     y = ship.y  # reset y
     for i in range(size):
         player.field[y, x] = ship  # should be not size, but ship
+        if isinstance(booked_places_in_random, list):
+            booked_places_in_random.append((y, x))
         ship.booked_places_append(1, (y, x))  # save object coords in the class
         x, y = change_place(x, y, orientation)
 
@@ -93,22 +98,32 @@ def hit(player, y, x):  # should take enemy player and coords
         raise errors.already_hit  # ERROR, DON'T CHANGE THE TURN!!!
 
 
-def random_place(player: Player):
+def check_if_win(player: Player):
     for ship in player.ships:
-        if ship.already_place:
-            continue
-        else:
-            while not ship.already_place:
-                x = random.randrange(0, length)
-                y = random.randrange(0, height)
-                orientation = random.choice(['vertical', 'horizontal'])
+        if ship.hp > 0:
+            return False
 
-                ship.x = x
-                ship.y = y
-                ship.orientation = orientation
+    return True
 
-                try:
-                    place_ship(player, ship)
-                except errors.MyError as err:
-                    pass
-                    # print(*err.args)
+
+def random_place(player: Player):
+    booked_places_in_random = []
+    for ship in player.ships:
+        while not ship.already_place:
+            x = random.randrange(0, length)
+            y = random.randrange(0, height)
+            orientation = random.choice(['vertical', 'horizontal'])
+
+            if (y, x) in booked_places_in_random:
+                continue
+
+            ship.x = x
+            ship.y = y
+
+            ship.orientation = orientation
+
+            try:
+                place_ship(player, ship, booked_places_in_random)
+            except errors.MyError as err:
+                pass
+                # print(*err.args)

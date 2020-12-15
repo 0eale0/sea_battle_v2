@@ -40,9 +40,9 @@ def create_ships_for_random(t_id):
                            ship.orientation)
 
         cursor.execute("INSERT INTO ships VALUES(?,?,?,?,?,?,?,?,?)", tuple_with_args)
+        conn.commit()
         # ships.append(ship)
     create_field(t_id)
-    conn.commit()
 
 
 def create_ships(t_id, tuples_with_basic_info: list = False):  # It's difference because booked_place is list

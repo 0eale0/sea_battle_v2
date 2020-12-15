@@ -1,20 +1,13 @@
 from data_base import functions_for_create_objects
 from data_base import functions_for_work_with_bd
 from telegram.handlers import for_keyboard
+from telegram.data.text_for_handlers import winner_text, looser_text
 from aiogram.types import CallbackQuery
 from logic import logic, phases
 from classes import some_classes
 from data_base.db import cursor, conn
 from aiogram.utils.exceptions import MessageNotModified
 import asyncio
-
-cursor.execute("DELETE FROM ships")
-cursor.execute("DELETE FROM field")
-cursor.execute("DELETE FROM in_queue")
-cursor.execute("DELETE FROM messages")
-cursor.execute("DELETE FROM phase")
-cursor.execute("DELETE FROM ships")
-cursor.execute("DELETE FROM sea_battle_game")
 
 
 async def start_game(t_id):
@@ -41,6 +34,7 @@ async def call_back_for_phase_4(callback, game=False):
         return
 
     player_for_hit = cost_dict_for_turn[reverse_turn]
+    player = cost_dict_for_turn[turn]
 
     await call_back_for_hit(callback, player_for_hit, game)  # can change the turn in db if miss hit
 
@@ -50,8 +44,6 @@ async def call_back_for_phase_4(callback, game=False):
     new_reverse_turn = new_turn_info[1]
     new_cost_dict = new_turn_info[2]
 
-    print(turn, new_turn)
-
     if turn != new_turn:
         print('sleep')
         await call_back_for_show_phase_4(callback, game, turn)
@@ -60,12 +52,24 @@ async def call_back_for_phase_4(callback, game=False):
     await call_back_for_show_phase_4(callback, game)
 
     if logic.check_if_win(player_for_hit):
-        print('Победа')
+        # send for loser
+        await for_keyboard.edit_message_after_someone_win(player=player_for_hit,
+                                                          enemy_id=player.t_id,
+                                                          function_for_text=looser_text)
+        # send for winner
+        await for_keyboard.edit_message_after_someone_win(player=player,
+                                                          enemy_id=player_for_hit.t_id,
+                                                          function_for_text=winner_text)
+
+        functions_for_work_with_bd.clear_table_after_game(player.t_id)
+        functions_for_work_with_bd.clear_table_after_game(player_for_hit.t_id)
+
+
 
 
 async def call_back_for_hit(callback: CallbackQuery,
                             player_for_hit,
-                            game: some_classes.SeaBattleGame = False,):
+                            game: some_classes.SeaBattleGame = False, ):
     t_id = callback.from_user.id
 
     if not game:
@@ -82,7 +86,6 @@ async def call_back_for_hit(callback: CallbackQuery,
 async def call_back_for_show_phase_4(callback: CallbackQuery,
                                      game=False,
                                      old_turn=False):
-
     turn_info = functions_for_work_with_bd.get_turn_info(game)  # [(turn, reverse_turn, cost_dict)]
     reverse_turn = turn_info[1]
     cost_dict_for_turn = turn_info[2]

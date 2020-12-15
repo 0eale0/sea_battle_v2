@@ -43,6 +43,20 @@ async def edit_message_after_ready(player):
                                         reply_markup=keyboard)
 
 
+async def edit_message_after_someone_win(player, enemy_id, function_for_text):
+    cursor.execute(f"SELECT * FROM messages WHERE t_id = {player.t_id}")
+    msg_id = cursor.fetchone()[0]
+
+    cursor.execute(f"SELECT nickname FROM player WHERE t_id = {enemy_id}")
+    enemy_nickname = cursor.fetchone()[0]
+    text = function_for_text(enemy_nickname)
+
+    keyboard = ''
+    await bot.edit_message_text(chat_id=player.t_id,
+                                message_id=msg_id,
+                                text=text)
+
+
 async def edit_message_after_hit(player, player_for_hit):
     cursor.execute(f"SELECT * FROM messages WHERE t_id = {player.t_id}")
     msg_id = cursor.fetchone()[0]

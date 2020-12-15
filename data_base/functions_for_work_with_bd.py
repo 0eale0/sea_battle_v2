@@ -7,6 +7,14 @@ from logic import phases
 import json
 
 
+def clear_table_after_game(t_id):
+    cursor.execute(f"DELETE FROM field WHERE t_id = {t_id}")
+    cursor.execute(f"DELETE FROM messages WHERE t_id = {t_id}")
+    cursor.execute(f"DELETE FROM phase WHERE t_id = {t_id}")
+    cursor.execute("DELETE FROM sea_battle_game WHERE t_id_1 = ? OR t_id_2 = ?", (t_id, t_id))
+    cursor.execute(f"DELETE FROM ships WHERE t_id = {t_id}")
+
+
 def get_phase(t_id):
     cursor.execute(f"SELECT player_phase from phase WHERE t_id = {t_id}")
     phase = cursor.fetchone()

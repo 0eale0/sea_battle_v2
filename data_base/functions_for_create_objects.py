@@ -122,6 +122,8 @@ def create_player(t_id, enemy_id, field, ships):
         cursor.execute(f"SELECT nickname FROM in_queue WHERE t_id = {t_id}")
         nickname = cursor.fetchall()[0][0]
 
+        print(nickname)
+
         tuple_with_args = (t_id, nickname)
         cursor.execute("INSERT INTO player VALUES(?, ?)", tuple_with_args)  #WARNING!
         conn.commit()

@@ -13,6 +13,7 @@ def clear_table_after_game(t_id):
     cursor.execute(f"DELETE FROM phase WHERE t_id = {t_id}")
     cursor.execute("DELETE FROM sea_battle_game WHERE t_id_1 = ? OR t_id_2 = ?", (t_id, t_id))
     cursor.execute(f"DELETE FROM ships WHERE t_id = {t_id}")
+    conn.commit()
 
 
 def get_phase(t_id):

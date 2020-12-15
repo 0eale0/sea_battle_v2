@@ -1,4 +1,4 @@
-dictionary = {'/start': 'Идёт поиск игры, ожидайте',
+dictionary = {'/start': 'Идёт поиск игры, ожидайте...',
               'game_found': 'Противник найден игра началась',
               '/help': 'Такие-то правила'}
 
@@ -12,7 +12,7 @@ def winner_text(nickname):
 
 
 def looser_text(nickname):
-    text = f'Сожалеем, вы были унижены {nickname}'
+    text = f'Сожалеем, вы были унижены by {nickname}'
     return text
 
 
